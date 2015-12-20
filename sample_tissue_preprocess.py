@@ -1,14 +1,6 @@
 ## build the qualified sample-tissue rep; to be further used later on
-## two criterias: 1. sample has genotype information; and 2. sample is in eQTL (sample size>=60) tissue
-## right now I use 60 as the threashold for eQTL tissues
-
-## right after we get the sample list, we should process the rpkm file to only leave these qualified samples (for convenience of up-coming processing and computation)  --> done in this script
-
-
-## notes:
-##	1. first of all remove all samples of individuals that have no genotype information
-##	2. then check how these samples distributed in all tissues, to decide how many tissues to involve
-##	3. 
+## two criterions: 1. sample has genotype information; and 2. sample is in eQTL tissue (sample size>=#size)
+## right now I use 100 as the threashold for eQTL tissues (33 etissues left then)
 
 
 
@@ -16,7 +8,6 @@
 ##==== libraries
 ##=====================
 import math
-
 
 
 
