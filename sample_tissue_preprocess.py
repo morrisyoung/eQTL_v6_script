@@ -12,6 +12,15 @@
 
 
 
+##=====================
+##==== library
+##=====================
+import math
+
+
+
+
+
 
 
 ##=====================
@@ -20,6 +29,8 @@
 individual_rep = {}		# hashing all the individuals with genotype information
 sample_tissue_map = {}		# mapping all the samples into their tissue types
 filter = 100			# TODO: we can change this to get more or less eTissues
+ratio_null = 0.5		# at least this portion of genes are expressed over the below value are treated as expressed genes
+rpkm_min = 0.1			# see above
 
 
 
@@ -30,6 +41,7 @@ filter = 100			# TODO: we can change this to get more or less eTissues
 ##==================
 ##==== sub-routines
 ##==================
+# get the "xxx-yyy" from "xxx-yyy-zzz-aaa-qqq", which is defined as the individual ID of the GTEx samples
 def get_individual_id(s):
 	## naively find the second '-'
 	id = ''
@@ -47,6 +59,29 @@ def get_individual_id(s):
 
 
 
+# at least ratio_null portion of genes are expressed over rpkm_min will be treated as an expressed gene
+# this can be later re-defined according to other rules
+def check_null(l):
+	# transform the list first of all (from string to float)
+	l = map(lambda x: float(x), l)
+
+	count = 0
+	for i in range(len(l)):
+		if l[i] > rpkm_min:
+			count += 1
+
+	ratio = (count * 1.0) / len(l)
+
+	if ratio > ratio_null:
+		return 0
+	else:
+		return 1
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
@@ -57,11 +92,8 @@ if __name__ == '__main__':
 	'''
 	phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_individuals_test
 	phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_individuals_train
-	phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_samples
 	phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_samples_test
 	phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_samples_train
-	phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_count
-	phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_count_60
 	'''
 
 
@@ -350,22 +382,36 @@ if __name__ == '__main__':
 
 
 
-
-
-
-
 	##======================================================================================================
 	##==== remove all the NULL genes as defined (testing for all samples)
 	##==== target: GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_1_null
-	##==== target: GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize
 	##======================================================================================================
-	# GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_2_esample
+	"""
 	file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_2_esample", 'r')
 	file1 = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_1_null", 'w')
+	line = file.readline()
+	file1.write(line)
 
+	while 1:
+		line = (file.readline()).strip()
+		if not line:
+			break
+
+		# check this gene
+		line = line.split('\t')
+		if check_null(line[1:]):
+			continue
+		else:
+			file1.write(line[0] + '\t')
+			for i in range(1, len(line)):
+				file1.write(line[i] + '\t')
+			file1.write('\n')
 
 	file.close()
 	file1.close()
+	"""
+
+
 
 
 
@@ -376,33 +422,52 @@ if __name__ == '__main__':
 	##==== normalizing all the samples (here we use Log normalize other than the previous Quantile)
 	##==== target: GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize
 	##=============================================================================================
+	"""
 	file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_1_null", 'r')
 	file1 = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize", 'w')
+	line = file.readline()
+	file1.write(line)
 
+	while 1:
+		line = (file.readline()).strip()
+		if not line:
+			break
+
+		line = line.split('\t')
+		gene = line[0]
+		file1.write(gene + '\t')
+
+		rpkm_list = map(lambda x: float(x), line[1:])
+		for i in range(len(rpkm_list)):
+			rpkm = rpkm_list[i]
+			rpkm = math.log(rpkm + 0.1)	# TODO here is the rule of transformation: shifted logarithm
+			file1.write(str(rpkm) + '\t')
+
+		file1.write('\n')
 
 	file.close()
 	file1.close()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	"""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	##======================================================================================================
 	##==== separating all the esamples into their tissues
 	##==== target: expression_by_etissue/tissue_list.txt
 	##==== target: expression_by_etissue/tissue_x.txt
 	##======================================================================================================
+	"""
 	# get the etissue list
 	eQTL_tissue = {}
 	file = open("../data_processed/phs000424.v6.pht002743.v6.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_100_samples", 'r')
@@ -462,4 +527,5 @@ if __name__ == '__main__':
 		file.close()
 		file1.close()
 	"""
+
 
