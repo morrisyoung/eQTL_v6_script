@@ -13,7 +13,7 @@
 
 
 ##=====================
-##==== library
+##==== libraries
 ##=====================
 import math
 
@@ -458,10 +458,6 @@ if __name__ == '__main__':
 
 
 
-
-
-
-
 	##======================================================================================================
 	##==== separating all the esamples into their tissues
 	##==== target: expression_by_etissue/tissue_list.txt
@@ -497,7 +493,7 @@ if __name__ == '__main__':
 	count = 0
 	for tissue in tissue_list:
 		count += 1
-		file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_2_esample", 'r')
+		file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize", 'r')
 		file1 = open("../data_processed/expression_by_etissue/tissue_" + str(count) + ".txt", 'w')
 
 		# filter all the samples again
@@ -527,5 +523,4 @@ if __name__ == '__main__':
 		file.close()
 		file1.close()
 	"""
-
 
