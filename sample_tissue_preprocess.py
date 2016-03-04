@@ -125,6 +125,7 @@ if __name__ == '__main__':
 
 
 
+
 	##========================================================================================
 	##==== remove samples that have no genotype information
 	##==== target: GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_1_genotype
@@ -141,7 +142,6 @@ if __name__ == '__main__':
 		individual_rep[id] = 1
 
 	file.close()
-
 
 
 
@@ -194,8 +194,8 @@ if __name__ == '__main__':
 	##==== target: phs000424.v6.pht002743.v6.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_count
 	##==== target: phs000424.v6.pht002743.v6.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_count_#size
 	##===================================================================================================
-	# sample_tissue_map
 	"""
+	# sample_tissue_map
 	file = open("../data_processed/phs000424.v6.pht002743.v6.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type", 'r')
 	sample_tissue_map = {}
 	while 1:
@@ -252,6 +252,7 @@ if __name__ == '__main__':
 	print count
 	file.close()
 	"""
+
 
 
 
@@ -373,6 +374,9 @@ if __name__ == '__main__':
 
 
 
+
+
+
 	##======================================================================================================
 	##==== remove all the NULL genes as defined (testing for all samples)
 	##==== target: GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_1_null
@@ -409,6 +413,12 @@ if __name__ == '__main__':
 
 
 
+
+
+	## (sharing the data with Chuqiao) processing stops here, as we might need both log and quantile normalization
+
+
+
 	##=============================================================================================
 	##==== normalizing all the samples (here we use Log normalize other than the previous Quantile)
 	##==== target: GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize
@@ -439,8 +449,6 @@ if __name__ == '__main__':
 	file.close()
 	file1.close()
 	"""
-
-
 
 
 
@@ -514,4 +522,6 @@ if __name__ == '__main__':
 		file.close()
 		file1.close()
 	"""
+
+
 
