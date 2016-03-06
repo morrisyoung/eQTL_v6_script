@@ -15,7 +15,7 @@ In the imputed data directory ("phg000520.v2.GTEx\_MidPoint\_Imputation.genotype
 2. ./genotype\_imputed/genotype\_vcf
 3. ./genotype\_imputed/genotype\_processed
 
-Then run the two sections (separately) of "genotype\_vcf\_parser.py" under "./genotype\_imputed/", to perform the following two functions:
+Then run the two sections (separately) of "genotype\_vcf\_parser.py" under "./genotype\_imputed/" and for each chromosome separately (as the disk quota issue), to perform the following two functions:
 
 1. splitting the VCF file into header file and sub-VCF file for each chromosome (saved to "./genotype\_imputed/genotype\_vcf/")
 2. extracting the tped/dosage/snp\_exclusion\_list information from each sub-VCF file for each chromosome (saved to "./genotype\_imputed/genotype\_processed/")
