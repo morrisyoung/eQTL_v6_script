@@ -148,6 +148,16 @@ if __name__ == "__main__":
 			allele2 = line[4]
 			#
 			filter = line[6]
+			#
+			type_list = line[8].split(':')		# retrieve "GT:GL:DS" information
+			index_genotype = 0
+			index_dosage = 0
+			for count in range(len(type_list)):
+				type = type_list[count]
+				if type == 'GT':
+					index_genotype = count
+				if type == 'DS':
+					index_dosage = count
 			genotype_list = line[9:]
 
 
@@ -165,8 +175,8 @@ if __name__ == "__main__":
 
 			for element in genotype_list:
 				element = element.split(':')
-				pair = element[1].split('/')
-				dosage = element[2]
+				pair = element[index_genotype].split('/')
+				dosage = element[index_dosage]
 
 				# allele#1
 				if pair[0] == '0':
@@ -184,7 +194,7 @@ if __name__ == "__main__":
 				else:
 					file_tped.write("0" + ' ')
 
-				file_dosage.write(element[2] + ' ')
+				file_dosage.write(dosage + ' ')
 			
 			file_tped.write('\n')
 			file_dosage.write('\n')
