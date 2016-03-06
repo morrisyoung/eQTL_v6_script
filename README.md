@@ -17,10 +17,10 @@ In the imputed data directory ("phg000520.v2.GTEx\_MidPoint\_Imputation.genotype
 
 Then run the two sections (separately) of "genotype\_vcf\_parser.py" under "./genotype\_imputed/", to perform the following two functions:
 
-1. splitting the VCF file into header file and sub-VCF file for each chromosome (saved to "./genotype\_imputed/genotype\_vcf")
-2. extracting the tped/dosage/snp\_exclusion\_list information from each sub-VCF file for each chromosome (saved to "./genotype\_imputed/genotype\_processed")
+1. splitting the VCF file into header file and sub-VCF file for each chromosome (saved to "./genotype\_imputed/genotype\_vcf/")
+2. extracting the tped/dosage/snp\_exclusion\_list information from each sub-VCF file for each chromosome (saved to "./genotype\_imputed/genotype\_processed/")
 
-After that, we can use the procedure similar to GTEx.v.4 to process the data (snp exclusion, pruning; here is the [link](https://github.com/morrisyoung/eQTL_v4_script#5-the-pipeline-for-genotype-qc-and-ld-pruning)).
+We can find the tfam file under "../phg000520.v2.GTEx\_MidPoint.genotype-qc.MULTI/Imputation/".
 
-We can find the tfam file under "./phg000520.v2.GTEx\_MidPoint.genotype-qc.MULTI/Imputation/".
+After that, we can use the procedure similar to GTEx.v.4 to process the data (snp QC exclusion, pruning; here is the [link](https://github.com/morrisyoung/eQTL_v4_script#5-the-pipeline-for-genotype-qc-and-ld-pruning)).
 
