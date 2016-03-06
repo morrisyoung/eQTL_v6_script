@@ -3,7 +3,7 @@
 ##	chrX.tped
 ##	chrX.dosage
 ##	chrX.maf05.exclusion.snplist.txt
-## 2. get the individual information:
+## 2. get the individual information: (NOTE: we already have had this from the dataset, thus no need)
 ##	chrX.tfam
 
 
@@ -104,7 +104,7 @@ if __name__ == "__main__":
 
 
 
-
+	'''
 	##========================================================================================================================
 	## func: extract the genotype information:
 	##	chrX.tped
@@ -208,15 +208,7 @@ if __name__ == "__main__":
 		file_tped.close()
 		file_dosage.close()
 		file_elist.close()
+	'''
 
-
-
-
-
-
-	##========================================================================================================================
-	## func: extract the individual information:
-	##	chrX.tfam
-	##========================================================================================================================
 
 
