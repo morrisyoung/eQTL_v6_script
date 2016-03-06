@@ -24,3 +24,4 @@ We can find the tfam file under "../phg000520.v2.GTEx\_MidPoint.genotype-qc.MULT
 
 After that, we can use the procedure similar to GTEx.v.4 to process the data (snp QC exclusion, pruning; here is the [link](https://github.com/morrisyoung/eQTL_v4_script#5-the-pipeline-for-genotype-qc-and-ld-pruning)).
 
+**note:** We need "chrX.tped" and "chrX.tfam" (--tfile) to perform the snp QC exclusion (witn snp\_exclusion\_list), and that will generate bed/fam/bim files that we can do the LD pruning. And we can finally extract the dosage information from "chrX.dosage".
