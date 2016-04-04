@@ -18,12 +18,10 @@ In the imputed data directory ("phg000520.v2.GTEx\_MidPoint\_Imputation.genotype
 
 Next gunzip this file: "./GTEx\_Analysis\_20150112\_OMNI\_2.5M\_5M\_450Indiv\_chr1to22\_genot\_imput\_info04\_maf01\_HWEp1E6\_ConstrVarIDs.vcf.gz".
 
-Then run the two sbu-routines (separately) of "genotype\_vcf\_parser.py" under "./genotype\_imputed/" and for each chromosome separately (as the disk quota issue), to perform the following two functions:
+Then run the two routines, "genotype\_vcf\_splitter.py" and "genotype\_vcf\_parser.py" under "./genotype\_imputed/" sequentially (in the middle, please gzip this file: "./GTEx\_Analysis\_20150112\_OMNI\_2.5M\_5M\_450Indiv\_chr1to22\_genot\_imput\_info04\_maf01\_HWEp1E6\_ConstrVarIDs.vcf"), to perform the following two functions:
 
 1. split the VCF file into header file and sub-VCF file for each chromosome (saved to "./genotype\_imputed/genotype\_vcf/")
 2. extract the tped/dosage/snp\_exclusion\_list information from each sub-VCF file for each chromosome (saved to "./genotype\_imputed/genotype\_processed/"), and delete the vcf file after processing the current chromosome (due to disk quota issue).
-
-Then gzip this file: "./GTEx\_Analysis\_20150112\_OMNI\_2.5M\_5M\_450Indiv\_chr1to22\_genot\_imput\_info04\_maf01\_HWEp1E6\_ConstrVarIDs.vcf".
 
 We can find the tfam file under "../phg000520.v2.GTEx\_MidPoint.genotype-qc.MULTI/Imputation/".
 
