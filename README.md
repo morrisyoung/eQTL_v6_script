@@ -21,9 +21,9 @@ Next gunzip this file: "./GTEx\_Analysis\_20150112\_OMNI\_2.5M\_5M\_450Indiv\_ch
 Then run the two routines, "genotype\_vcf\_splitter.py" and "genotype\_vcf\_parser.py" under "./genotype\_imputed/" sequentially (in the middle, please gzip this file: "./GTEx\_Analysis\_20150112\_OMNI\_2.5M\_5M\_450Indiv\_chr1to22\_genot\_imput\_info04\_maf01\_HWEp1E6\_ConstrVarIDs.vcf"), to perform the following two functions:
 
 1. split the VCF file into header file and sub-VCF file for each chromosome (saved to "./genotype\_imputed/genotype\_vcf/")
-2. extract the tped/dosage/snp\_exclusion\_list information from each sub-VCF file for each chromosome (saved to "./genotype\_imputed/genotype\_processed/"), and delete the vcf file after processing the current chromosome (due to disk quota issue).
+2. extract the tped/dosage/snp\_exclusion\_list information from each sub-VCF file for each chromosome (saved to "./genotype\_imputed/genotype\_processed/"), and delete the vcf file after processing the current chromosome (to save some disk quota).
 
-We can find the tfam file under "../phg000520.v2.GTEx\_MidPoint.genotype-qc.MULTI/Imputation/".
+We can find the tfam file under "../phg000520.v2.GTEx\_MidPoint.genotype-qc.MULTI/Imputation/", and we need to create "chrX.tfam" under "./genotype\_imputed/genotype\_processed/" as further processing requires.
 
 After that, we can use the procedure similar to GTEx.v.4 to process the data (snp QC exclusion, pruning; here is the [link](https://github.com/morrisyoung/eQTL_v4_script#5-the-pipeline-for-genotype-qc-and-ld-pruning)).
 
