@@ -7,6 +7,7 @@
 ##	chrX.tfam
 
 
+
 ## notes (file format):
 '''
 *.tped: (white-space delimited file)
@@ -46,16 +47,6 @@ line = ""
 
 
 
-def get_chr(string):
-	char = ''
-	i = 0
-	while 1:
-		char += string[i]
-		i=i+1
-		if string[i] == '\t':
-			break
-	return char
-
 
 
 if __name__ == "__main__":
@@ -70,10 +61,11 @@ if __name__ == "__main__":
 	##	chrX.dosage
 	##	chrX.maf05.exclusion.snplist.txt
 	##========================================================================================================================
-#	chr = 1			# TODO: for different chromosomes
+	#chr = 1			# TODO: for different chromosomes
 
 
 
+	### a simple local test case
 	#filename = "../genotype/test_chr22_main.vcf"
 	#file_in = open(filename, 'r')
 	#filename = "../genotype/test_chr22.tped"
@@ -82,9 +74,6 @@ if __name__ == "__main__":
 	#file_dosage = open(filename, 'w')
 	#filename = "../genotype/test_chr22.elist"
 	#file_elist = open(filename, 'w')
-
-
-
 
 
 
@@ -166,7 +155,7 @@ if __name__ == "__main__":
 			file_tped.write('\n')
 			file_dosage.write('\n')
 
-			##== elist (TODO: we start from info04;maf01;hwe6, thus we only need maf05)
+			##== elist (NOTE: we start from info04;maf01;hwe6, thus we only need maf05)
 			if filter == 'maf05':
 				file_elist.write(snp + '\n')
 

@@ -1,5 +1,12 @@
 ## some mics scripts to process the source data
 
+# libraries
+import sys
+import time
+import os
+
+
+
 
 def get_individual_id(s):
 	## naively find the second '-'
@@ -65,6 +72,7 @@ if __name__ == "__main__":
 
 
 
+
 	##==========================================================
 	##==== get the chr and pos of all genes from annotation file
 	##==========================================================
@@ -94,11 +102,5 @@ if __name__ == "__main__":
 
 	file.close()
 	file1.close()
-
-
-
-
-
-
 
 
