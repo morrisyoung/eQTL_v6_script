@@ -18,6 +18,8 @@ In the imputed data directory ("phg000520.v2.GTEx\_MidPoint\_Imputation.genotype
 1. ./genotype\_imputed
 2. ./genotype\_imputed/genotype\_vcf
 3. ./genotype\_imputed/genotype\_processed
+4. ./genotype\_imputed/genotype\_post\_prune
+
 
 
 Next gunzip this file: "./GTEx\_Analysis\_20150112\_OMNI\_2.5M\_5M\_450Indiv\_chr1to22\_genot\_imput\_info04\_maf01\_HWEp1E6\_ConstrVarIDs.vcf.gz".
@@ -32,3 +34,26 @@ We can find the tfam file under "../phg000520.v2.GTEx\_MidPoint.genotype-qc.MULT
 After that, we can use the procedure similar to GTEx.v.4 to process the data (snp QC exclusion, pruning; here is the [link](https://github.com/morrisyoung/eQTL_v4_script#5-the-pipeline-for-genotype-qc-and-ld-pruning)).
 
 **Note:** We need "chrX.tped" and "chrX.tfam" (--tfile) to perform the snp QC exclusion (witn snp\_exclusion\_list), and that will generate bed/fam/bim files that we can do the LD pruning. And we can finally extract the dosage information from "chrX.dosage".
+
+Specifically, do the following (updated from the pipeline for last version data):
+
+"genotype\_qc\_ld.py" and "genotype\_post\_prune.py", and the pipeline is as followed:
+
+```
+1. for all the chromosome “X”, do all the following (step #2 - #10):
+2. cp chrX.tfam “chrX.tfam”
+3. [QC] ./plink --tfile “chrX” --exclude “chrX.maf05.exclusion.snplist.txt” --make-bed
+4. [pruning] ./plink --bfile plink --indep-pairwise 50kb 5 0.5 (0.5 may possibly be adjusted into other values)
+5. [LD statistics] ./plink --bfile plink --r2 --ld-snp-list plink.prune.out --ld-window-kb 50 --ld-window 99999 --ld-window-r2 0.5 (0.5 can be adjusted into other values)
+6. [LD statistics further] python genotype_post_prune.py
+7. mv plink.prune.in ../genotype_post_prune/chr“X”.prune.in
+8. mv plink.prune.out ../genotype_post_prune/chr“X”.prune.out
+9. mv chr“X”.post_prune.txt ../genotype_post_prune/
+10. rm plink.*
+```
+
+The work is done under "/ifs/scratch/c2b2/ip\_lab/sy2515/GTEx/data.v.6/47024/PhenoGenotypeFiles/RootStudyConsentSet\_phs000424.GTEx.v6.p1.c1.GRU/GenotypeFiles/phg000520.v2.GTEx\_MidPoint\_Imputation.genotype-calls-vcf.c1/genotype\_imputed/genotype\_processed/", and the results will be moved to "/ifs/scratch/c2b2/ip\_lab/sy2515/GTEx/data.v.6/47024/PhenoGenotypeFiles/RootStudyConsentSet\_phs000424.GTEx.v6.p1.c1.GRU/GenotypeFiles/phg000520.v2.GTEx\_MidPoint\_Imputation.genotype-calls-vcf.c1/genotype\_imputed/genotype\_post\_prune/".
+
+
+Finally, we can extract the left SNPs from the dosage file.
+
