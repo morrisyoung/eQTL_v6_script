@@ -5,7 +5,11 @@ I use these scripts to process GTEx.v.6 data.
 
 ## 1. Gene expression data
 
-1. expression\_sample\_tissue\_preprocess.py
+Do the following two sequentially:
+
+1. expression\_geno\_etissue.py
+2. expression\_gene\_normal.py
+
 
 ## 2. Genotype data
 

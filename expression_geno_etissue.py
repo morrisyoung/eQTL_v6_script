@@ -32,8 +32,6 @@ import math
 individual_rep = {}		# hashing all the individuals with genotype information
 sample_tissue_map = {}		# mapping all the samples into their tissue types
 filter = 100			# TODO: we can change this to get more or less eTissues
-ratio_null = 0.5		# at least this portion of genes are expressed over the below value are treated as expressed genes
-rpkm_min = 0.1			# see above
 
 
 
@@ -62,42 +60,9 @@ def get_individual_id(s):
 
 
 
-# at least ratio_null portion of genes are expressed over rpkm_min will be treated as an expressed gene
-# this can be later re-defined according to other rules
-def check_null(l):
-	# transform the list first of all (from string to float)
-	l = map(lambda x: float(x), l)
-
-	count = 0
-	for i in range(len(l)):
-		if l[i] > rpkm_min:
-			count += 1
-
-	ratio = (count * 1.0) / len(l)
-
-	if ratio > ratio_null:
-		return 0
-	else:
-		return 1
-
-
-
-
-
 
 
 if __name__ == '__main__':
-
-
-
-	# I further need all the following (for the network model):
-	'''
-	phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_individuals_test
-	phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_individuals_train
-	phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_samples_test
-	phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_samples_train
-	'''
-
 
 
 
@@ -108,7 +73,7 @@ if __name__ == '__main__':
 	##==== target: phs000424.v6.pht002743.v6.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type
 	##========================================================================================
 	file = open("../data_source/phs000424.v6.pht002743.v6.p1.c1.GTEx_Sample_Attributes.GRU.txt", 'r')
-	file1 = open("../data_processed/phs000424.v6.pht002743.v6.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type", 'w')
+	file1 = open("../data_processed/phs000424.v6.pht002743.v6.p1.c1.GTEx_Sample_Attributes.GRU.txt_sample_tissue_type", 'w')
 	count = 0
 	while 1:
 		line = file.readline()[:-1]	# can't strip all "\t\t\t\t", as they are place holder
@@ -204,7 +169,7 @@ if __name__ == '__main__':
 	##==== target: phs000424.v6.pht002743.v6.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_count_#size
 	##===================================================================================================
 	# sample_tissue_map
-	file = open("../data_processed/phs000424.v6.pht002743.v6.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type", 'r')
+	file = open("../data_processed/phs000424.v6.pht002743.v6.p1.c1.GTEx_Sample_Attributes.GRU.txt_sample_tissue_type", 'r')
 	sample_tissue_map = {}
 	while 1:
 		line = file.readline()[:-1]	# can't strip '\t\t\t'
@@ -249,25 +214,19 @@ if __name__ == '__main__':
 		file.write(tissue + '\t' + str(counting[tissue]) + '\n')
 	file.close()
 
-	# filtering the counts
-	file = open("../data_processed/phs000424.v6.pht002743.v6.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_count_" + str(filter), 'w')
-	count = 0
-	for tissue in counting:
-		if counting[tissue] >= filter:
-			count += 1
-			file.write(tissue + '\t' + str(counting[tissue]) + '\n')
-	print "# of tissue with sample size >= " + str(filter) + ":",
-	print count
-	file.close()
 
-
-
-
-
-
-
-
-
-
+	#==== filtering the counts
+	filter_list = [0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200]
+	for i in range(len(filter_list)):
+		filter = filter_list[i]
+		file = open("../data_processed/phs000424.v6.pht002743.v6.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_count_" + str(filter), 'w')
+		count = 0
+		for tissue in counting:
+			if counting[tissue] >= filter:
+				count += 1
+				file.write(tissue + '\t' + str(counting[tissue]) + '\n')
+		print "# of tissue with sample size >= " + str(filter) + ":",
+		print count
+		file.close()
 
 

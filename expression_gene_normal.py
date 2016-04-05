@@ -21,6 +21,9 @@
 ##==== libraries
 ##=====================
 import math
+import sys
+import time
+import os
 
 
 
@@ -33,8 +36,8 @@ import math
 individual_rep = {}		# hashing all the individuals with genotype information
 sample_tissue_map = {}		# mapping all the samples into their tissue types
 filter = 100			# TODO: we can change this to get more or less eTissues
-ratio_null = 0.5		# at least this portion of genes are expressed over the below value are treated as expressed genes
-rpkm_min = 0.1			# see above
+ratio_null = 0.5		# TODO: at least this portion of genes are expressed over the below value are treated as expressed genes
+rpkm_min = 0.1			# TODO: see above
 
 
 
@@ -86,20 +89,7 @@ def check_null(l):
 
 
 
-
 if __name__ == '__main__':
-
-
-
-	# I further need all the following (for the network model):
-	'''
-	phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_individuals_test
-	phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_individuals_train
-	phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_samples_test
-	phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_samples_train
-	'''
-
-
 
 
 
@@ -107,10 +97,9 @@ if __name__ == '__main__':
 
 	##======================================================================================================
 	##==== extracting eQTL samples (the eTissue is defined as sample size >= #size)
-	##==== target: phs000424.v6.pht002743.v6.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_#size_samples"
+	##==== target: phs000424.v6.pht002743.v6.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_sample_#size"
 	##==== target: GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_2_esample
 	##======================================================================================================
-	"""
 	## get all the samples for tissue count >= filter
 	## eQTL_tissue
 	file = open("../data_processed/phs000424.v6.pht002743.v6.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_count_" + str(filter), 'r')
@@ -130,7 +119,7 @@ if __name__ == '__main__':
 	file.close()
 
 	## sample_tissue_rep
-	file = open("../data_processed/phs000424.v6.pht002743.v6.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type", 'r')
+	file = open("../data_processed/phs000424.v6.pht002743.v6.p1.c1.GTEx_Sample_Attributes.GRU.txt_sample_tissue_type", 'r')
 	sample_tissue_rep = {}
 	while 1:
 		line = file.readline()[:-1]
@@ -156,7 +145,7 @@ if __name__ == '__main__':
 			eQTL_tissue[tissue].append(sample)
 
 	# save the rep
-	file = open("../data_processed/phs000424.v6.pht002743.v6.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_" + str(filter) + "_samples", 'w')
+	file = open("../data_processed/phs000424.v6.pht002743.v6.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_sample_" + str(filter), 'w')
 	for tissue in eQTL_tissue:
 		file.write(tissue + '\t')
 		for sample in eQTL_tissue[tissue]:
@@ -167,7 +156,7 @@ if __name__ == '__main__':
 	##============ process the rpkm matrix to get eQTL samples ==============
 	## get the sample_rep first
 	sample_rep = {}
-	file = open("../data_processed/phs000424.v6.pht002743.v6.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_" + str(filter) + "_samples", 'r')
+	file = open("../data_processed/phs000424.v6.pht002743.v6.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_sample_" + str(filter), 'r')
 	while 1:
 		line = (file.readline()).strip()
 		if not line:
@@ -208,11 +197,6 @@ if __name__ == '__main__':
 
 	file.close()
 	file1.close()
-	"""
-
-
-
-
 
 
 
@@ -222,7 +206,6 @@ if __name__ == '__main__':
 	##==== remove all the NULL genes as defined (testing for all samples)
 	##==== target: GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_1_null
 	##======================================================================================================
-	"""
 	file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_2_esample", 'r')
 	file1 = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_1_null", 'w')
 	line = file.readline()
@@ -245,18 +228,11 @@ if __name__ == '__main__':
 
 	file.close()
 	file1.close()
-	"""
+
+	##==== remove temp data
+	os.system("rm " + "../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_2_esample")
 
 
-
-
-
-
-
-
-
-
-	## (sharing the data with Chuqiao) processing stops here, as we might need both log and quantile normalization
 
 
 
@@ -264,32 +240,124 @@ if __name__ == '__main__':
 	##==== normalizing all the samples (here we use Log normalize other than the previous Quantile)
 	##==== target: GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize
 	##=============================================================================================
-	"""
-	file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_1_null", 'r')
-	file1 = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize", 'w')
-	line = file.readline()
-	file1.write(line)
+	## the following is the log normalization
+	normal_quantile = 1
+	normal_log = 0
 
-	while 1:
-		line = (file.readline()).strip()
-		if not line:
-			break
+	if normal_quantile:
+		print "quantile normalization..."
 
-		line = line.split('\t')
-		gene = line[0]
-		file1.write(gene + '\t')
+		file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_1_null", 'r')
+		file1 = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize", 'w')
+		line = file.readline()
+		file1.write(line)
 
-		rpkm_list = map(lambda x: float(x), line[1:])
-		for i in range(len(rpkm_list)):
-			rpkm = rpkm_list[i]
-			rpkm = math.log(rpkm + 0.1)	# NOTE: here is the rule of transformation: shifted logarithm
-			file1.write(str(rpkm) + '\t')
 
-		file1.write('\n')
+		gene_list = []
+		description_list = []
+		rpkm_rep = {}  # hashing gene to L1
+		L2 = []
 
-	file.close()
-	file1.close()
-	"""
+		while 1:
+			line = (file.readline()).strip()
+			if not line:
+				break
+
+			## sorting; indexing (additive filling L2)
+			line = line.split('\t')
+			gene = line[0]
+			description = line[1]
+			gene_list.append(gene)
+			description_list.append(description)
+
+			expression = map(lambda x: float(x), line[2:])
+			expression = np.array(expression)
+
+			sort = np.argsort(expression)
+			## get the ordering list (or the rank list for this gene for all samples)
+			sort1 = []
+			for i in range(len(sort)):
+				sort1.append(0)
+			for i in range(len(sort)):	# the current i is the rank
+				index = sort[i]
+				sort1[index] = i
+
+			rpkm_rep[gene] = sort1
+
+			if len(L2) == 0:
+				for pos in sort:
+					rpkm = expression[pos]
+					L2.append(rpkm)
+			else:
+				for i in range(len(sort)):
+					pos = sort[i]
+					rpkm = expression[pos]
+					L2[i] += rpkm
+		file.close()
+
+		length = len(gene_list)
+		for i in range(len(L2)):
+			L2[i] = L2[i] * 1.0 / length
+
+
+		for i in range(len(gene_list)):
+			## two lists:
+			## L1 (value as the re-mapped positions of all original elements; each gene has one such list)
+			## L2 (containing the normalized/averaged value for each index/position)
+			gene = gene_list[i]
+			description = description_list[i]
+			L1 = rpkm_rep[gene]
+
+			file1.write(gene + '\t' + description + '\t')
+
+			for index in L1:
+				value = L2[index]
+				file1.write(str(value) + '\t')
+
+			file1.write('\n')
+
+		file1.close()
+
+		##==== remove temp data
+		os.system("rm " + "../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_1_null")
+
+
+	if normal_log:
+		print "log normalization..."
+
+		file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_1_null", 'r')
+		file1 = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize", 'w')
+		line = file.readline()
+		file1.write(line)
+
+		while 1:
+			line = (file.readline()).strip()
+			if not line:
+				break
+
+			line = line.split('\t')
+			gene = line[0]
+			file1.write(gene + '\t')
+
+			rpkm_list = map(lambda x: float(x), line[1:])
+			for i in range(len(rpkm_list)):
+				rpkm = rpkm_list[i]
+				rpkm = math.log(rpkm + 0.1)	# NOTE: here is the rule of transformation: shifted logarithm
+				file1.write(str(rpkm) + '\t')
+
+			file1.write('\n')
+
+		file.close()
+		file1.close()
+
+		##==== remove temp data
+		os.system("rm " + "../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_1_null")
+
+
+
+
+
+
 
 
 
@@ -315,7 +383,7 @@ if __name__ == '__main__':
 	"""
 	# get the etissue list
 	eQTL_tissue = {}
-	file = open("../data_processed/phs000424.v6.pht002743.v6.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_100_samples", 'r')
+	file = open("../data_processed/phs000424.v6.pht002743.v6.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_sample_" + str(filter), 'r')
 	while 1:
 		line = (file.readline()).strip()
 		if not line:
