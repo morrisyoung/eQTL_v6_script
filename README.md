@@ -55,5 +55,8 @@ Specifically, do the following (updated from the pipeline for last version data)
 The work is done under "/ifs/scratch/c2b2/ip\_lab/sy2515/GTEx/data.v.6/47024/PhenoGenotypeFiles/RootStudyConsentSet\_phs000424.GTEx.v6.p1.c1.GRU/GenotypeFiles/phg000520.v2.GTEx\_MidPoint\_Imputation.genotype-calls-vcf.c1/genotype\_imputed/genotype\_processed/", and the results will be moved to "/ifs/scratch/c2b2/ip\_lab/sy2515/GTEx/data.v.6/47024/PhenoGenotypeFiles/RootStudyConsentSet\_phs000424.GTEx.v6.p1.c1.GRU/GenotypeFiles/phg000520.v2.GTEx\_MidPoint\_Imputation.genotype-calls-vcf.c1/genotype\_imputed/genotype\_post\_prune/".
 
 
-Finally, we can extract the left SNPs from the dosage file.
+Finally, we can extract the left SNPs (un-pruned) from the dosage file, wiht script "genotype\_dosage\_matrix\_qc\_ld.py". This script will work under "/ifs/scratch/c2b2/ip\_lab/sy2515/GTEx/data.v.6/47024/PhenoGenotypeFiles/RootStudyConsentSet\_phs000424.GTEx.v6.p1.c1.GRU/GenotypeFiles/phg000520.v2.GTEx\_MidPoint\_Imputation.genotype-calls-vcf.c1/genotype\_imputed/", read dosage data from "./genotype\_processed/", and pruning information from "./genotype\_post\_prune/", and output the processed dosage matrix data in "./genotype\_450\_dosage\_matrix\_qc/" (organized by chromosomes and individuals). This script will additionally requires following data:
+
+1. chrX.tfam file, "./genotype\_processed/chrX.tfam", as we need to know in dosage file how these individuals are ordered
+
 
