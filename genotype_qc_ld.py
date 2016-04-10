@@ -20,7 +20,7 @@ if __name__ == "__main__":
 		##== ".tped":
 		repo = {}
 		snp_list = []
-		filename = "chr" + str(chr) + ".tfam"
+		filename = "chr" + str(chr) + ".tped"
 		file = open(filename, 'r')
 		while 1:
 			line = (file.readline()).strip()
