@@ -29,7 +29,16 @@ Then run the two routines, "**genotype\_vcf\_splitter.py**" and "**genotype\_vcf
 1. split the VCF file into header file and sub-VCF file for each chromosome (saved to "./genotype\_imputed/genotype\_vcf/")
 2. extract the tped/dosage/snp\_exclusion\_list information from each sub-VCF file for each chromosome (saved to "./genotype\_imputed/genotype\_processed/"), and delete the vcf file after processing the current chromosome (to save some disk quota).
 
-**NOTE:** There are duplicated SNPs in chr1, chr2 and chr12 (observed; for example, "12\_48000000\_T\_C\_b37" in chr12). So I need to check and remove duplications in the below processing script before QC and LD.
+**NOTE:** There are duplicated SNPs in chr1, chr2 and chr12 and potentially others (observed; for example, "12\_48000000\_T\_C\_b37" in chr12). So I need to check and remove duplications in the below processing script before QC and LD. The duplicated SNPs are documented below for GTEx's reference:
+
+
+| Chromosome        | duplicated SNP           |
+| ------------- |:-------------:|
+| Chr1      | xxx |
+| Chr2      | xxx      |
+| Chr12 | xxx      |
+| Chr14 | xxx      |
+
 
 We can find the tfam file under "../phg000520.v2.GTEx\_MidPoint.genotype-qc.MULTI/Imputation/", and we need to create "chrX.tfam" under "./genotype\_imputed/genotype\_processed/" as further processing requires.
 
