@@ -35,6 +35,8 @@ if __name__ == "__main__":
 				print chr,
 				print snp
 				print line
+				print "and the existing one":
+				print repo[snp]
 			else:
 				snp_list.append(snp)
 				repo[snp] = line
@@ -61,6 +63,8 @@ if __name__ == "__main__":
 				print chr,
 				print snp
 				print line
+				print "and the existing one":
+				print repo[snp]
 			else:
 				snp_list.append(snp)
 				repo[snp] = line
