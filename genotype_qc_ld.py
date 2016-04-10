@@ -14,6 +14,66 @@ if __name__ == "__main__":
 		print "working on chr#",
 		print chr
 
+
+		## NOTE: below is crucial !!!
+		##====== check duplicated SNPs in ".tped" and ".dosage" files, and remove them ======
+		##== ".tped":
+		repo = {}
+		snp_list = []
+		filename = "chr" + str(chr) + ".tfam"
+		file = open(filename, 'r')
+		while 1:
+			line = (file.readline()).strip()
+			if not line:
+				break
+
+			line_split = line.split(' ')
+			snp = line_split[1]
+			if snp in repo:
+				## check
+				print ".tped",
+				print chr,
+				print snp
+				print line
+			else:
+				snp_list.append(snp)
+				repo[snp] = line
+		file.close()
+		file = open(filename, 'w')
+		for snp in snp_list:
+			file.write(repo[snp] + '\n')
+		file.close()
+		##== ".dosage":
+		repo = {}
+		snp_list = []
+		filename = "chr" + str(chr) + ".dosage"
+		file = open(filename, 'r')
+		while 1:
+			line = (file.readline()).strip()
+			if not line:
+				break
+
+			line_split = line.split(' ')
+			snp = line_split[1]
+			if snp in repo:
+				## check
+				print ".dosage",
+				print chr,
+				print snp
+				print line
+			else:
+				snp_list.append(snp)
+				repo[snp] = line
+		file.close()
+		file = open(filename, 'w')
+		for snp in snp_list:
+			file.write(repo[snp] + '\n')
+		file.close()
+
+
+
+
+
 		##====== 1 ======
 		print "copy the chrX.tfam file"
 		os.system('cp chrX.tfam chr' + str(chr) + '.tfam >/dev/null 2>&1')
