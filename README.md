@@ -10,7 +10,7 @@ Do the following two sequentially:
 1. expression\_geno\_etissue.py
 2. expression\_gene\_normal.py
 
-And the following script will need to run once to get the partition of training set and testing set.
+And the following script will need to run once to get the partition of training set and testing set (this should run after the above scripts).
 
 1. expression\_train\_test\_partition.py
 
