@@ -80,7 +80,7 @@ Finally, we can extract the left SNPs (un-pruned) from the dosage file, wiht scr
 
 The factor part will be initialized with PCA, and the cis- association part will be initialized with close-form linear regression. They are under "/ifs/scratch/c2b2/ip\_lab/sy2515/GTEx/data.v.6/47024/PhenoGenotypeFiles/RootStudyConsentSet\_phs000424.GTEx.v6.p1.c1.GRU/preprocess/eQTL\_script", and they should run just in the current directory.
 
-1. init\_factor.py
+1. init\_cellfactor.py
 2. init\_cis.py
 
 
