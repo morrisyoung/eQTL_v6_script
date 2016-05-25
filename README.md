@@ -76,11 +76,19 @@ Finally, we can extract the left SNPs (un-pruned) from the dosage file, wiht scr
 1. chrX.tfam file, "./genotype\_processed/chrX.tfam", as we need to know in dosage file how these individuals are ordered
 
 
-## 3. Model initialization
+## 3. Annotation
+
+1. anno\_tss\_xymt.py (for gene TSS, and X/Y/MT gene list)
+2. anno\_indiv\_get.py
+
+
+
+## 4. Model initialization
 
 The factor part will be initialized with PCA, and the cis- association part will be initialized with close-form linear regression. They are under "/ifs/scratch/c2b2/ip\_lab/sy2515/GTEx/data.v.6/47024/PhenoGenotypeFiles/RootStudyConsentSet\_phs000424.GTEx.v6.p1.c1.GRU/preprocess/eQTL\_script", and they should run just in the current directory.
 
 1. init\_cellfactor.py
-2. init\_cis.py
+2. init\_snp\_cellfactor.py
+3. init\_cis.py
 
 
