@@ -207,7 +207,7 @@ if __name__ == "__main__":
 
 		line = line.split('\t')
 		gene = line[0]
-		chr = int(line[1])
+		chr = line[1]
 		tss = int(line[2])
 		gene_tss[gene] = (chr, tss)
 	file.close()
@@ -232,7 +232,7 @@ if __name__ == "__main__":
 		gene = gene_list[i]
 		if gene in gene_xymt_rep:
 			continue
-		chr = gene_tss[gene][0]
+		chr = int(gene_tss[gene][0])
 		tss = gene_tss[gene][1]
 		flag1 = 0
 		flag2 = 0
@@ -287,7 +287,7 @@ if __name__ == "__main__":
 		if gene in gene_xymt_rep:
 			continue
 
-		chr = gene_tss[gene][0]
+		chr = int(gene_tss[gene][0])
 		start = gene_cis_index[gene][0]
 		end = gene_cis_index[gene][1]
 
