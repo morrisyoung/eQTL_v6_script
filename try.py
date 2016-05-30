@@ -4,6 +4,9 @@
 import sys
 import time
 import os
+import numpy as np
+import scipy.linalg
+
 
 
 
@@ -107,7 +110,34 @@ if __name__ == "__main__":
 
 
 
-	for i in range(1, 23):
-		chr = str(i)
-		
+	print "testing the regression..."
+	genotype_matrix = np.load("./temp/ENSG00000109790.12_geno.npy")
+	expression_array = np.load("./temp/ENSG00000109790.12_gene.npy")
+
+
+	print len(genotype_matrix)
+	print len(genotype_matrix[0])
+
+	print len(expression_array)
+
+
+	genotype_matrix_inv = np.linalg.pinv(genotype_matrix)
+
+
+	print len(genotype_matrix_inv)
+	print len(genotype_matrix_inv[0])
+
+	coef = np.dot(genotype_matrix_inv, expression_array)
+
+
+	print len(coef)
+	print coef
+
+
+	#m = scipy.linalg.lstsq(genotype_matrix, expression_array)[0]
+
+
+	#print m
+
+
 

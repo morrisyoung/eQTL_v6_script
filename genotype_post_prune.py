@@ -64,7 +64,8 @@ if __name__ == "__main__":
 	file.close()
 
 
-	##=========== remove pruned SNPs which are not associated with any un-pruned SNP ===========
+	## NOTE:
+	##=========== remove pruned SNPs which are not associated with any un-pruned SNP (or we can't find) ===========
 	print "remove pruned SNPs which are not associated with any un-pruned SNP"
 	remove_list = []
 	for pruned in rep:
@@ -98,3 +99,6 @@ if __name__ == "__main__":
 			file.write(pruned + ' ' + str(r2) + '\t')
 		file.write('\n')
 	file.close()
+
+
+

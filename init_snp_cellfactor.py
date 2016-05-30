@@ -80,7 +80,7 @@ if __name__ == "__main__":
 
 
 
-	'''
+
 	#==== prepare the dosage matrix (or sub-matrix)
 	Data = []
 	sample_list = np.load("../data_processed/expression_train_samples.npy")
@@ -133,7 +133,7 @@ if __name__ == "__main__":
 	print len(Data[0])
 
 	np.save("../data_processed/init_dosage_train", Data)
-	'''
+
 
 
 

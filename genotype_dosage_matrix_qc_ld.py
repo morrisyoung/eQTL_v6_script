@@ -44,7 +44,8 @@ if __name__ == '__main__':
 	file.close()
 
 
-
+	## DEBUG
+	count = 0
 	for chr in range(1, 23):
 
 		##==== create chr folder
@@ -70,6 +71,10 @@ if __name__ == '__main__':
 		print "and there are",
 		print len(rep_snp),
 		print "un-pruned SNPs."
+
+		# DEBUG
+		count += len(rep_snp)
+
 
 
 
@@ -120,4 +125,7 @@ if __name__ == '__main__':
 			file.close()
 
 
+
+	print "total number of un-pruned SNPs:",
+	print count
 

@@ -6,7 +6,8 @@
 
 import time
 import numpy as np
-import scipy
+import scipy.linalg	# NOTE: the way to import (specially for Scipy)
+
 
 
 # global variables definition and initialization
@@ -353,7 +354,10 @@ if __name__ == "__main__":
 				file.write('\n')
 			file.close()
 			'''
-			break
+			## NOTE: in this case, I will instead inverse the matrix, and then dot product to get the coefficients
+			genotype_matrix_inv = np.linalg.pinv(genotype_matrix)
+			m = np.dot(genotype_matrix_inv, expression_array)
+			para_rep[gene] = m
 
 
 
