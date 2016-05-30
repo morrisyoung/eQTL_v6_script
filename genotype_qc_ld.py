@@ -74,6 +74,33 @@ if __name__ == "__main__":
 		for snp in snp_list:
 			file.write(repo[snp] + '\n')
 		file.close()
+		##== ".maf05.exclusion.snplist.txt":	# NOTE: this is also necessary!!!
+		repo = {}
+		snp_list = []
+		filename = "chr" + str(chr) + ".maf05.exclusion.snplist.txt"
+		file = open(filename, 'r')
+		while 1:
+			line = (file.readline()).strip()
+			if not line:
+				break
+
+			snp = line
+			if snp in repo:
+				## check
+				print ".maf05.exclusion.snplist.txt",
+				print chr,
+				print snp
+			else:
+				snp_list.append(snp)
+				repo[snp] = 1
+		file.close()
+		file = open(filename, 'w')
+		for snp in snp_list:
+			file.write(snp + '\n')
+		file.close()
+
+
+
 
 
 

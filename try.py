@@ -72,7 +72,7 @@ if __name__ == "__main__":
 
 
 
-
+	'''
 	##==========================================================
 	##==== get the chr and pos of all genes from annotation file
 	##==========================================================
@@ -102,7 +102,12 @@ if __name__ == "__main__":
 
 	file.close()
 	file1.close()
+	'''
 
 
 
-	
+
+	for i in range(1, 23):
+		chr = str(i)
+		
+
