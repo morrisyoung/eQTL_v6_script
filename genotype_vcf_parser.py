@@ -81,7 +81,7 @@ if __name__ == "__main__":
 
 
 		filename = "./genotype_vcf/chr" + str(chr) + ".txt"
-		filename_vcf = "./genotype_vcf/chr" + str(chr) + ".txt"
+		filename_vcf = "./genotype_vcf/chr" + str(chr) + ".txt"		# NOTE: used to remove the vcf file
 		file_in = open(filename, 'r')
 		filename = "./genotype_processed/chr" + str(chr) + ".tped"
 		file_tped = open(filename, 'w')

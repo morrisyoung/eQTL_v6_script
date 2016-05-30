@@ -33,7 +33,7 @@ Then run the two routines, "**genotype\_vcf\_splitter.py**" and "**genotype\_vcf
 1. split the VCF file into header file and sub-VCF file for each chromosome (saved to "./genotype\_imputed/genotype\_vcf/")
 2. extract the tped/dosage/snp\_exclusion\_list information from each sub-VCF file for each chromosome (saved to "./genotype\_imputed/genotype\_processed/"), and delete the vcf file after processing the current chromosome (to save some disk quota).
 
-**NOTE:** There are duplicated SNPs in chr1, chr2 and chr12 and potentially others (observed; for example, "12\_48000000\_T\_C\_b37" in chr12). So I need to check and remove duplications in the below processing script before QC and LD. The duplicated SNPs are documented below for GTEx's reference (some of them are only duplicated in names, and they might be different SNPs actually IoI; I removed the second one and left the first appearing one):
+**NOTE:** There are duplicated SNPs in chr1, chr2 and chr12 and potentially others (observed; for example, "12\_48000000\_T\_C\_b37" in chr12). So I need to check and remove duplications in the below processing script before QC and LD. The duplicated SNPs are documented below for GTEx's reference (some of them are only duplicated in names, and they might be different SNPs actually IoI; I removed the second one and left the first appearing one, in later pipeline script):
 
 
 | Chromosome        | duplicated SNP           |
@@ -53,19 +53,20 @@ After that, we can use the procedure similar to GTEx.v.4 to process the data (sn
 
 Specifically, do the following (updated from the pipeline for last version data):
 
-"genotype\_qc\_ld.py" and "genotype\_post\_prune.py", and the pipeline is as followed:
+"genotype\_qc\_ld.py" (which also includes "genotype\_post\_prune.py"), and the pipeline is as followed:
 
 ```
 1. for all the chromosome “X”, do all the following (step #2 - #10):
-2. cp chrX.tfam “chrX.tfam”
-3. [QC] ./plink --tfile “chrX” --exclude “chrX.maf05.exclusion.snplist.txt” --make-bed
-4. [pruning] ./plink --bfile plink --indep-pairwise 50kb 5 0.5 (0.5 may possibly be adjusted into other values)
-5. [LD statistics] ./plink --bfile plink --r2 --ld-snp-list plink.prune.out --ld-window-kb 50 --ld-window 99999 --ld-window-r2 0.5 (0.5 can be adjusted into other values)
-6. [LD statistics further] python genotype_post_prune.py
-7. mv plink.prune.in ../genotype_post_prune/chr“X”.prune.in
-8. mv plink.prune.out ../genotype_post_prune/chr“X”.prune.out
-9. mv chr“X”.post_prune.txt ../genotype_post_prune/
-10. rm plink.*
+2. process the issued SNPs (SNP ID duplication now, and I take the first one and removed all following)
+3. cp chrX.tfam “chrX.tfam”
+4. [QC] ./plink --tfile “chrX” --exclude “chrX.maf05.exclusion.snplist.txt” --make-bed
+5. [pruning] ./plink --bfile plink --indep-pairwise 50kb 5 0.5 (0.5 may possibly be adjusted into other values)
+6. [LD statistics] ./plink --bfile plink --r2 --ld-snp-list plink.prune.out --ld-window-kb 50 --ld-window 99999 --ld-window-r2 0.5 (0.5 can be adjusted into other values)
+7. [LD statistics further] python genotype_post_prune.py
+8. mv plink.prune.in ../genotype_post_prune/chr“X”.prune.in
+9. mv plink.prune.out ../genotype_post_prune/chr“X”.prune.out
+10. mv chr“X”.post_prune.txt ../genotype_post_prune/
+11. rm plink.*
 ```
 
 The work is done under "/ifs/scratch/c2b2/ip\_lab/sy2515/GTEx/data.v.6/47024/PhenoGenotypeFiles/RootStudyConsentSet\_phs000424.GTEx.v6.p1.c1.GRU/GenotypeFiles/phg000520.v2.GTEx\_MidPoint\_Imputation.genotype-calls-vcf.c1/genotype\_imputed/genotype\_processed/", and the results will be moved to "/ifs/scratch/c2b2/ip\_lab/sy2515/GTEx/data.v.6/47024/PhenoGenotypeFiles/RootStudyConsentSet\_phs000424.GTEx.v6.p1.c1.GRU/GenotypeFiles/phg000520.v2.GTEx\_MidPoint\_Imputation.genotype-calls-vcf.c1/genotype\_imputed/genotype\_post\_prune/".

@@ -45,7 +45,6 @@ if __name__ == '__main__':
 
 
 
-
 	for chr in range(1, 23):
 
 		##==== create chr folder
@@ -91,7 +90,7 @@ if __name__ == '__main__':
 			snp = line[1]
 			pos = line[2]
 			list_dosage = line[5:]
-			
+
 			if snp in rep_snp:
 				list_snp_name.append(snp)
 				list_snp_pos.append(pos)
@@ -109,7 +108,7 @@ if __name__ == '__main__':
 		for i in range(len(list_snp_name)):
 			snp = list_snp_name[i]
 			pos = list_snp_pos[i]
-			file.write(snp + " " + pos + "\n")
+			file.write(snp + " " + pos + "\n")	# NOTE: the space is for consistency with old data format
 		file.close()
 
 		for individual in rep_individual_snp:

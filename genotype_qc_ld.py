@@ -17,6 +17,7 @@ if __name__ == "__main__":
 
 		## NOTE: below is crucial !!!
 		##====== check duplicated SNPs in ".tped" and ".dosage" files, and remove them ======
+		## for now, I keep the first SNP, and remove all the following duplicated ones
 		##== ".tped":
 		repo = {}
 		snp_list = []
@@ -110,4 +111,5 @@ if __name__ == "__main__":
 
 
 	print "done!"
+
 

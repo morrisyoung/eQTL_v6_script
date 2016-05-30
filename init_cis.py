@@ -6,6 +6,7 @@
 
 import time
 import numpy as np
+import scipy
 
 
 # global variables definition and initialization
@@ -99,6 +100,17 @@ if __name__ == "__main__":
 	print "there are # of individuals:",
 	print num_individual
 	snp_dosage_load()
+
+	#DEBUG
+	for individual in snp_dosage_rep:
+		print "total # of SNPs:",
+		count = 0
+		for i in range(22):
+			count += len(snp_dosage_rep[individual][i])
+		print count
+		break
+
+
 
 
 	## snp_pos_list
@@ -227,6 +239,7 @@ if __name__ == "__main__":
 
 
 	##===================================================== cis- region definition =====================================================
+	'''
 	# gene_cis_index	NOTE: only need to do the processing routine once (for the same gene annotation, and the same set of SNPs)
 	for i in range(len(gene_list)):
 		gene = gene_list[i]
@@ -257,8 +270,7 @@ if __name__ == "__main__":
 		end = gene_cis_index[gene][1]
 		file.write(gene + '\t' + str(start) + '\t' + str(end) + '\n')
 	file.close()
-
-
+	'''
 
 
 	##==== for future I won't need to do above again
@@ -307,7 +319,7 @@ if __name__ == "__main__":
 			for k in range(start, end+1):
 				dosage = snp_dosage_rep[individual][chr-1][k]
 				genotype_matrix[-1].append(dosage)
-			genotype_matrix[-1].append(1)  # NOTE: we need the intercept
+			genotype_matrix[-1].append(1)  # NOTE: we need the intercept, and we need to manually add the input item (1) for the intercept
 		genotype_matrix = np.array(genotype_matrix)
 		## sample:
 		#X = np.array([[1,2,3,1], [2,4,6,1], [3,6,9,1]])  # 1x1 + 2x2 + 3x3 + 1
@@ -315,9 +327,14 @@ if __name__ == "__main__":
 		#y = np.array([15, 29, 44])
 		#m = np.linalg.lstsq(X, y)[0]
 		try:
+			## NOTE: the following gene can't make SVD converge:
+			##	"ENSG00000109790.12"
 			m = np.linalg.lstsq(genotype_matrix, expression_array)[0]
+			## NOTE: try Scipy:
+			#m = scipy.linalg.lstsq(genotype_matrix, expression_array)[0]
 			para_rep[gene] = m  ## there is an extra intercept here!!!
-		except ValueError:
+		#except ValueError:
+		except:
 			print "error for gene:",
 			print gene
 			print "genotype_matrix is:"
@@ -336,6 +353,8 @@ if __name__ == "__main__":
 				file.write('\n')
 			file.close()
 			'''
+			break
+
 
 
 	##===================================================== save all learned parameters =====================================================
