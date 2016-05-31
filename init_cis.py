@@ -354,10 +354,14 @@ if __name__ == "__main__":
 				file.write('\n')
 			file.close()
 			'''
+
 			## NOTE: in this case, I will instead inverse the matrix, and then dot product to get the coefficients
+			## NOTE: for some, still SVD can't succeed --> SO: if can't do, don't do
+			'''
 			genotype_matrix_inv = np.linalg.pinv(genotype_matrix)
 			m = np.dot(genotype_matrix_inv, expression_array)
 			para_rep[gene] = m
+			'''
 
 
 
