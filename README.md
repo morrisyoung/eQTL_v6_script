@@ -85,10 +85,15 @@ Finally, we can extract the left SNPs (un-pruned) from the dosage file, with scr
 
 ## 4. Model initialization
 
-The factor part will be initialized with PCA, and the cis- association part will be initialized with close-form linear regression. They are under "/ifs/scratch/c2b2/ip\_lab/sy2515/GTEx/data.v.6/47024/PhenoGenotypeFiles/RootStudyConsentSet\_phs000424.GTEx.v6.p1.c1.GRU/preprocess/eQTL\_script", and they should run just in the current directory.
+The factor part will be initialized with NFM (as we need positive numbers for Logit^{-1}), and the cis- association part will be initialized with lstsq solver (dosage x coef = factor). They are under "/ifs/scratch/c2b2/ip\_lab/sy2515/GTEx/data.v.6/47024/PhenoGenotypeFiles/RootStudyConsentSet\_phs000424.GTEx.v6.p1.c1.GRU/preprocess/eQTL\_script", and they should run just in the current directory. The following script should run in order.
 
-1. init\_cellfactor.py
-2. init\_snp\_cellfactor.py
-3. init\_cis.py
+1. init\_cis.py
+2. init\_cellfactor.py
+3. init\_snp\_split.py
+4. init\_snp\_cellfactor.py
 
+
+Note that, SVD sometimes can't converge for the lstsq (cis- init), in that case we just initialize the parameters as all 0. For the SNP\_Cellenv parameters, I split the d\_snp into two sub-matrices, and do lstsq for each part, and tune their weights to get an approximation for the parameter initialization.
+
+(Jun.1) **Current issue for model initialization**: We can't do PCA and NMF, as the output of Logistic function is strictly positive. According to suggested for Neural Network, we should probably randomly initialize, while I worry about the convergence of the neuralnet when we have at most 6000 training samples.
 
