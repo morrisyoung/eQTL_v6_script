@@ -97,3 +97,15 @@ Note that, SVD sometimes can't converge for the lstsq (cis- init), in that case 
 
 (Jun.1) **Current issue for model initialization**: We can't do PCA and NMF, as the output of Logistic function is strictly positive. According to suggested for Neural Network, we should probably randomly initialize, while I worry about the convergence of the neuralnet when we have at most 6000 training samples.
 
+
+
+## 5. Shallow analysis ()
+
+These scripts are used to perform some shallow analysis (cis- and tissue type expression prediction), aiming at testing the predictive power of the simple model.
+
+1. analy\_cis\_tissue\_pred.py
+2. analy\_corr\_plot.py
+
+
+
+
