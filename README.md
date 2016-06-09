@@ -99,7 +99,7 @@ Note that, SVD sometimes can't converge for the lstsq (cis- init), in that case 
 
 
 
-## 5. Shallow analysis ()
+## 5. Shallow analysis (baseline)
 
 These scripts are used to perform some shallow analysis (cis- and tissue type expression prediction), aiming at testing the predictive power of the simple model.
 
