@@ -25,7 +25,8 @@ import sys
 import time
 import os
 import numpy as np
-
+from scipy import stats
+import scipy.stats as st
 
 
 
@@ -241,9 +242,12 @@ if __name__ == '__main__':
 	##==== normalizing all the samples (here we use Log normalize other than the previous Quantile)
 	##==== target: GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize
 	##=============================================================================================
-	## the following is the log normalization
-	normal_quantile = 1
+	## the following several normalization methods:
+	normal_quantile = 0
 	normal_log = 0
+	normal_z = 0
+	normal_Gaussian_rank = 1
+
 
 	if normal_quantile:
 		print "quantile normalization..."
@@ -355,9 +359,73 @@ if __name__ == '__main__':
 		os.system("rm " + "../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_1_null")
 
 
+	if normal_z:
+		print "z normalization..."
+
+		file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_1_null", 'r')
+		file1 = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize_z", 'w')
+		line = file.readline()
+		file1.write(line)
+
+		while 1:
+			line = (file.readline()).strip()
+			if not line:
+				break
+
+			line = line.split('\t')
+			gene = line[0]
+			file1.write(gene + '\t')
+
+			rpkm_list = map(lambda x: float(x), line[1:])
+			rpkm_list = np.array(rpkm_list)
+			rpkm_list = stats.zscore(rpkm_list)
+
+			for i in range(len(rpkm_list)):
+				rpkm = rpkm_list[i]
+				file1.write(str(rpkm) + '\t')
+			file1.write('\n')
+
+		file.close()
+		file1.close()
+
+		##==== remove temp data
+		os.system("rm " + "../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_1_null")
 
 
+	if normal_Gaussian_rank:
+		print "Gaussian rank normalization..."
 
+		file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_1_null", 'r')
+		file1 = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize_Gaussian_rank", 'w')
+		line = file.readline()
+		file1.write(line)
+
+		while 1:
+			line = (file.readline()).strip()
+			if not line:
+				break
+
+			line = line.split('\t')
+			gene = line[0]
+			file1.write(gene + '\t')
+
+			rpkm_list = map(lambda x: float(x), line[1:])
+			rpkm_list = np.array(rpkm_list)
+			rpkm_list_rank = rpkm_list.argsort()
+			rpkm_list_rank_1 = map(lambda x: x+1, rpkm_list_rank)
+			for rank in rpkm_list_rank_1:
+				zscore = st.norm.ppf(rank*1.0/(len(rpkm_list_rank_1)+1))
+				file1.write(str(zscore) + '\t')
+			file1.write('\n')
+
+		file.close()
+		file1.close()
+
+		##==== remove temp data
+		os.system("rm " + "../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_1_null")
+
+
+	
 
 
 
@@ -441,6 +509,7 @@ if __name__ == '__main__':
 		file.close()
 		file1.close()
 	"""
+
 
 
 

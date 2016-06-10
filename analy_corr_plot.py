@@ -1,6 +1,8 @@
 ## given the Pearson correlation results (between prediction and real data), plot them for all genes
 
 ## input of this program:
+##	0.1. tissue index mapping ("../analy_result/tissue_index_map.txt")
+##	0.2. gene chr ("../data_processed/gene_tss.txt")
 ##	1. correlation values ("../analy_result/analy_corr_tissueX.txt")
 ##	2. gene list in order ("../analy_result/analy_gene_list_tissueX.npy")
 
@@ -61,6 +63,8 @@ if __name__ == "__main__":
 	########
 	for tissue in tissue_rep:
 
+
+
 		##===================================================== corr_rep and gene_list =====================================================
 		corr_rep = {}
 		filename = "../analy_result/analy_corr_tissue" + str(tissue_rep[tissue]) + ".txt"
@@ -76,19 +80,21 @@ if __name__ == "__main__":
 			corr_rep[gene] = corr
 		file.close()
 		
-		filename = "../analy_result/analy_gene_list_tissue" + str(tissue_rep[tissue])
-		gene_list = np.load()
+		filename = "../analy_result/analy_gene_list_tissue" + str(tissue_rep[tissue]) + ".npy"
+		gene_list = np.load(filename)
 
 
 
 		##===================================================== plot =====================================================
 		# with gene_list and corr_rep
 		plt.figure(1)
-		for gene in gene_list:
+		for i in range(len(gene_list)):
+
+			gene = gene_list[i]
 			corr = corr_rep[gene]
 
-			chr = int(gene_tss[gene][0])
-			color = color_table[chr-1]
+			chr = gene_tss[gene][0]
+			color = color_map[chr]
 			plt.plot(i, corr, color, marker = 'o', alpha=0.7)
 
 			'''
@@ -107,6 +113,7 @@ if __name__ == "__main__":
 
 
 		plt.show()
+
 
 
 

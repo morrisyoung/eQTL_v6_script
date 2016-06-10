@@ -1,14 +1,12 @@
 ## test the prediction power of the cis- SNPs (multivariate linear regression model)
 
-## NOTE: I will try different data pre-processing methods
+## TODO: I will try different data pre-processing methods
 
 
-## NOTE:
-##	1. [NOTE] when multiple tissues are involved, it makes no sense to predict the gene expression just by the cis- regulators; we must have tissue indicators as a predictor in this setting --> this is just equal to do linear regression for each tissue separately (the intercept variables will expalin tissue effects!!!)
+## notes:
+##	1. when multiple tissues are involved, it makes no sense to predict the gene expression just by the cis- regulators; we must have tissue indicators as a predictor in this setting, and do in a tissue-specific fashion --> this is just equal to do linear regression for each tissue separately (the intercept variables will expalin tissue effects!!!)  otherwise the same predictor (the genotype of the same individual) will have multiple predictions for different tissues; although there are only 75+ training samples to do this regression, we need to do that
 ##	2. from this experiment, we want to see that the simple combination of cis- regulators and tissue effects don't have much predictive performance; and that's why we try to build a better model --> two directions: a. hierarchical linear regression model; b. our neural net model
-##	3. [NOTE] in order to initialize the cis- regulators (for the more advanced model), we can only do linear regression in a tissue-specific fashion, otherwise the same predictor (the genotype of the same individual) will have multiple predictions for different tissues; although there are only 75+ training samples to do this regression, we need to do that; probably later we need to solve the issue of large numerical values (through expression data pre-processing)
-##	4. [TODO] I'll probably also do the hierarchical linear regression for the cis- and tissue factor regression
-##	5. [TODO] for the neural model, how can we let parameters share information across different tissues? we probably need to add a prior on top of the model
+##	3. [TODO] for the neural model, how can we let parameters share information across different tissues? we probably need to add a prior on top of the model
 
 
 
@@ -42,6 +40,13 @@ gene_cis_index = {}		# mapping the gene to cis snp indices (start position and e
 # result table:
 para_rep = {}
 
+
+
+
+
+
+
+## NOTE: I'm testing various normalization for the data
 
 
 
@@ -99,6 +104,7 @@ if __name__ == "__main__":
 	print "working on the multi-linear regression of cis- SNPs for all genes"
 
 
+
 	##===================================================== genotype =====================================================
 	print "snp_dosage_rep..."
 	file = open("../data_processed/list_individuals.txt", 'r')
@@ -115,6 +121,7 @@ if __name__ == "__main__":
 	print "there are # of individuals:",
 	print num_individual
 	snp_dosage_load()
+
 
 	#DEBUG
 	for individual in snp_dosage_rep:
@@ -150,7 +157,6 @@ if __name__ == "__main__":
 
 
 
-
 	########
 	######## tissue loops
 	########
@@ -181,6 +187,8 @@ if __name__ == "__main__":
 
 
 
+
+
 		##===================================================== expression =====================================================
 		##================== get the current training tissues and samples inside (list)
 		print "get training samples..."
@@ -203,7 +211,9 @@ if __name__ == "__main__":
 
 		##=================== query the RPKM according to the above list
 		print "get expression matrix for these training samples..."
-		file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize", 'r')
+		#file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize", 'r')
+		file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize_z", 'r')
+		#file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize_Gaussian_rank", 'r')
 
 		###
 		sample_list = ((file.readline()).strip()).split('\t')[1:]
@@ -243,6 +253,8 @@ if __name__ == "__main__":
 
 		###
 		num_gene = len(gene_list)
+		print "number of genes:",
+		print num_gene
 
 		###
 		sample_list = []
@@ -379,7 +391,7 @@ if __name__ == "__main__":
 				m = np.linalg.lstsq(genotype_matrix, expression_array)[0]
 				## NOTE: try Scipy:
 				#m = scipy.linalg.lstsq(genotype_matrix, expression_array)[0]
-				para_rep[gene] = m  ## there is an extra intercept here!!!
+				para_rep[gene] = np.array(m)  ## there is an extra intercept here!!!
 			#except ValueError:
 			except:
 				print "error for gene:",
@@ -475,12 +487,12 @@ if __name__ == "__main__":
 
 		##=================== query the RPKM according to the above list
 		print "get expression matrix for these testing samples..."
-		file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize", 'r')
+		#file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize", 'r')
+		file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize_z", 'r')
+		#file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize_Gaussian_rank", 'r')
 
 		###
-		file.readline()
-		file.readline()
-		sample_list = ((file.readline()).strip()).split('\t')[2:]
+		sample_list = ((file.readline()).strip()).split('\t')[1:]
 		index_rep = {}
 		for i in range(len(sample_list)):
 			sample = sample_list[i]
@@ -497,7 +509,7 @@ if __name__ == "__main__":
 			line = line.split('\t')
 			gene = line[0]
 			gene_list.append(gene)
-			rpkm_list = map(lambda x: float(x), line[2:])
+			rpkm_list = map(lambda x: float(x), line[1:])
 
 			for i in range(len(rpkm_list)):
 				rpkm = rpkm_list[i]
@@ -517,6 +529,8 @@ if __name__ == "__main__":
 
 		###
 		num_gene = len(gene_list)
+		print "number of genes:",
+		print num_gene
 
 		### this is crucial for building the expression matrix, as we need the order of all samples
 		sample_list = []
@@ -529,6 +543,7 @@ if __name__ == "__main__":
 			sample = sample_list[i]
 			expression_matrix.append(sample_rep[sample])
 		expression_matrix = np.array(expression_matrix)
+
 
 		###
 		gene_tss = {}
@@ -579,6 +594,7 @@ if __name__ == "__main__":
 				expression_array_real.append(rpkm)
 			expression_array_real = np.array(expression_array_real)
 
+
 			##
 			expression_array_exp = []
 			for j in range(len(sample_list)):
@@ -589,16 +605,24 @@ if __name__ == "__main__":
 					dosage = snp_dosage_rep[individual][chr-1][k]
 					genotype_array.append(dosage)
 				genotype_array.append(1)  # we need the intercept
+				genotype_array = np.array(genotype_array)
 				## expected expression level
-				rpkm = 0
-				for k in range(len(genotype_array)):
-					rpkm += genotype_array[k] * para_rep[gene][k]
+				rpkm = np.inner(genotype_array, para_rep[gene])
 				expression_array_exp.append(rpkm)
 			expression_array_exp = np.array(expression_array_exp)
+
+
+
+			## DEBUG
+			filename = "../analy_z_result/gene_" + gene
+			np.save(filename, expression_array_exp)
+
+
 
 			##
 			corr = np.corrcoef(expression_array_real, expression_array_exp)[0][1]
 			corr_rep[gene] = corr
+
 
 
 
@@ -629,12 +653,19 @@ if __name__ == "__main__":
 
 
 
-		# DEBUG
+
+
+		## DEBUG:
 		break
 
 
 
 
+
+
+
+
 	print "done!..."
+
 
 
