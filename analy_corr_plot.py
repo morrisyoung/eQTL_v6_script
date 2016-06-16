@@ -65,9 +65,19 @@ if __name__ == "__main__":
 
 
 
+		## DEBUG
+		tissue_rep[tissue] = 1
+
+
+
 		##===================================================== corr_rep and gene_list =====================================================
 		corr_rep = {}
-		filename = "../analy_result/analy_corr_tissue" + str(tissue_rep[tissue]) + ".txt"
+
+
+		## DEBUG
+		filename = "../analy_gr_result/analy_corr_tissue" + str(tissue_rep[tissue]) + ".txt"
+
+
 		file = open(filename, 'r')
 		while 1:
 			line = (file.readline()).strip()
@@ -80,7 +90,10 @@ if __name__ == "__main__":
 			corr_rep[gene] = corr
 		file.close()
 		
-		filename = "../analy_result/analy_gene_list_tissue" + str(tissue_rep[tissue]) + ".npy"
+		## DEBUG
+		filename = "../analy_gr_result/analy_gene_list_tissue" + str(tissue_rep[tissue]) + ".npy"
+
+
 		gene_list = np.load(filename)
 
 
@@ -113,6 +126,12 @@ if __name__ == "__main__":
 
 
 		plt.show()
+
+
+
+
+		## DEBUG
+		break
 
 
 

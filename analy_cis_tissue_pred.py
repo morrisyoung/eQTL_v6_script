@@ -46,7 +46,23 @@ para_rep = {}
 
 
 
+
+
 ## NOTE: I'm testing various normalization for the data
+## what to change:
+#	file = open("../analy_result/tissue_index_map.txt", 'w')
+#	filename = "../analy_result/analy_para_tissue" + str(tissue_rep[tissue]) + ".txt"
+#	filename = "../analy_result/analy_corr_tissue" + str(tissue_rep[tissue]) + ".txt"
+#	filename = "../analy_result/analy_gene_list_tissue" + str(tissue_rep[tissue])
+
+## and two instances of:
+#	file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize", 'r')
+
+## and the following to remove:
+#	filename = "../analy_result/gene_" + gene
+
+
+
 
 
 
@@ -173,7 +189,12 @@ if __name__ == "__main__":
 		tissue_rep[tissue] = tissue_count
 		tissue_count += 1
 	file.close()
-	file = open("../analy_result/tissue_index_map.txt", 'w')
+
+	## DEBUG
+	#file = open("../analy_result/tissue_index_map.txt", 'w')
+	#file = open("../analy_z_result/tissue_index_map.txt", 'w')
+	file = open("../analy_gr_result/tissue_index_map.txt", 'w')
+
 	for tissue in tissue_rep:
 		file.write(tissue + '\t' + str(tissue_rep[tissue]) + '\n')
 	file.close()
@@ -211,9 +232,11 @@ if __name__ == "__main__":
 
 		##=================== query the RPKM according to the above list
 		print "get expression matrix for these training samples..."
+
+		## DEBUG
 		#file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize", 'r')
-		file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize_z", 'r')
-		#file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize_Gaussian_rank", 'r')
+		#file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize_z", 'r')
+		file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize_Gaussian_rank", 'r')
 
 		###
 		sample_list = ((file.readline()).strip()).split('\t')[1:]
@@ -424,7 +447,11 @@ if __name__ == "__main__":
 
 
 		##===================================================== save all learned parameters ===================================================
-		filename = "../analy_result/analy_para_tissue" + str(tissue_rep[tissue]) + ".txt"
+		## DEBUG
+		#filename = "../analy_result/analy_para_tissue" + str(tissue_rep[tissue]) + ".txt"
+		#filename = "../analy_z_result/analy_para_tissue" + str(tissue_rep[tissue]) + ".txt"
+		filename = "../analy_gr_result/analy_para_tissue" + str(tissue_rep[tissue]) + ".txt"
+
 		file = open(filename, 'w')
 		for gene in para_rep:
 			para_list = para_rep[gene]
@@ -487,9 +514,11 @@ if __name__ == "__main__":
 
 		##=================== query the RPKM according to the above list
 		print "get expression matrix for these testing samples..."
+
+		## DEBUG
 		#file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize", 'r')
-		file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize_z", 'r')
-		#file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize_Gaussian_rank", 'r')
+		#file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize_z", 'r')
+		file = open("../data_processed/GTEx_Data_20150112_RNAseq_RNASeQCv1.1.8_gene_rpkm.gct_3_gene_2_normalize_Gaussian_rank", 'r')
 
 		###
 		sample_list = ((file.readline()).strip()).split('\t')[1:]
@@ -614,7 +643,9 @@ if __name__ == "__main__":
 
 
 			## DEBUG
-			filename = "../analy_z_result/gene_" + gene
+			#filename = "../analy_result/gene_" + gene
+			#filename = "../analy_z_result/gene_" + gene
+			filename = "../analy_gr_result/gene_" + gene
 			np.save(filename, expression_array_exp)
 
 
@@ -627,7 +658,12 @@ if __name__ == "__main__":
 
 
 		##===================================================== save corr_rep =====================================================
-		filename = "../analy_result/analy_corr_tissue" + str(tissue_rep[tissue]) + ".txt"
+
+		## DEBUG
+		#filename = "../analy_result/analy_corr_tissue" + str(tissue_rep[tissue]) + ".txt"
+		#filename = "../analy_z_result/analy_corr_tissue" + str(tissue_rep[tissue]) + ".txt"
+		filename = "../analy_gr_result/analy_corr_tissue" + str(tissue_rep[tissue]) + ".txt"
+
 		file = open(filename, 'w')
 		for gene in corr_rep:
 			file.write(gene + '\t' + str(corr_rep[gene]) + '\n')
@@ -639,7 +675,12 @@ if __name__ == "__main__":
 			if gene in para_rep:
 				gene_list_new.append(gene)
 		gene_list_new = np.array(gene_list_new)
-		filename = "../analy_result/analy_gene_list_tissue" + str(tissue_rep[tissue])
+
+		## DEBUG
+		#filename = "../analy_result/analy_gene_list_tissue" + str(tissue_rep[tissue])
+		#filename = "../analy_z_result/analy_gene_list_tissue" + str(tissue_rep[tissue])
+		filename = "../analy_gr_result/analy_gene_list_tissue" + str(tissue_rep[tissue])
+
 		np.save(filename, gene_list_new)
 
 
@@ -666,6 +707,9 @@ if __name__ == "__main__":
 
 
 	print "done!..."
+
+
+
 
 
 
